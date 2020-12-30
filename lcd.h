@@ -10,19 +10,31 @@
 #define LCD_INSTRUCTION_PORT  PORTB
 #define LCD_DATA_DDR          DDRD
 #define LCD_INSTRUCTION_DDR   DDRB
+#define LCD_DATA_PIN          PIND
 
 #define LCD_RW PB0
 #define LCD_RS PB1
 #define LCD_EN PB2
 
-#define LCD_CLEARDISPLAY    0x01
-#define LCD_RETURNHOME      0x02
-#define LCD_ENTRYMODESET    0x04
-#define LCD_DISPLAYCONTROL  0x08
-#define LCD_FUNCTIONSET     0x20
+#define LCD_CLEARDISPLAY    0
+#define LCD_RETURNHOME      1
+#define LCD_ENTRY           2
+#define LCD_ENTRY_INC       1
+#define LCD_ENTRY_SHIFT     0
+#define LCD_ON              3
+#define LCD_ON_DISPLAY      2
+#define LCD_ON_CURSOR       1
+#define LCD_ON_BLINK        0
+#define LCD_FUNCTION        5
+#define LCD_FUNCTION_8BIT   4
+#define LCD_FUNCTION_2LINES 3
+
+// instruction bit position
+#define LCD_BUSYFLAG 7
 
 // all timings are in uS
 #define LCD_DELAY_ENABLE_PULSE 1
+#define LCD_DELAY_BUSYFLAG     4
 
 #define LCD_ENABLE_DELAY() _delay_us(LCD_DELAY_ENABLE_PULSE)
 
@@ -38,7 +50,6 @@
   LCD_enablePulse();              \
 }
 
-void LCD_enablePulse(void);
 void LCD_init(void);
 void LCD_clear(void);
 void LCD_function_set(void);

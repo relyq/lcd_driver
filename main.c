@@ -12,14 +12,16 @@ int main(void){
   _delay_ms(10); // wait for display internal initialization to end
 
   LCD_clear();
-
   LCD_function_set();
-
   LCD_display_control();
-
   LCD_entry_mode();
-
   LCD_putc('s');
+  LCD_putc('o');
+  LCD_putc('g');
+  LCD_putc('u');
+  LCD_putc('i');
+  LCD_putc('<');
+  LCD_putc('3');
 
   while (1) {
     sleep_mode();
