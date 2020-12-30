@@ -1,3 +1,12 @@
 .*
 !.gitignore
-
+*.pdf
+*.elf
+*.lss
+*.map
+*.sym
+*.eep
+*.hex
+*.lst
+*.o
+*.vim
