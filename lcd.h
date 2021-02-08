@@ -6,6 +6,8 @@
  * hd44780
  */
 
+#include <stdint.h>
+
 #define LCD_DATA_PORT        PORTD
 #define LCD_INSTRUCTION_PORT PORTB
 #define LCD_DATA_DDR         DDRD
@@ -28,6 +30,11 @@
 #define LCD_FUNCTION        5
 #define LCD_FUNCTION_8BIT   4
 #define LCD_FUNCTION_2LINES 3
+#define LCD_SET_CGRAM       6
+#define LCD_SET_DDRAM       7
+
+#define LCD_LINE0_START 0x00
+#define LCD_LINE1_START 0x40
 
 // instruction bit position
 #define LCD_BUSYFLAG 7
@@ -56,6 +63,9 @@ void LCD_clear(void);
 void LCD_function_set(void);
 void LCD_display_control(void);
 void LCD_entry_mode(void);
+void LCD_cursor_set(uint8_t cursor, uint8_t blink);
+void LCD_cursor(uint8_t y, uint8_t x);
 void LCD_putc(char c);
+void LCD_puts(const char* str);
 
 #endif
