@@ -6,11 +6,11 @@
  * hd44780
  */
 
-#define LCD_DATA_PORT         PORTD
-#define LCD_INSTRUCTION_PORT  PORTB
-#define LCD_DATA_DDR          DDRD
-#define LCD_INSTRUCTION_DDR   DDRB
-#define LCD_DATA_PIN          PIND
+#define LCD_DATA_PORT        PORTD
+#define LCD_INSTRUCTION_PORT PORTB
+#define LCD_DATA_DDR         DDRD
+#define LCD_INSTRUCTION_DDR  DDRB
+#define LCD_DATA_PIN         PIND
 
 #define LCD_RW PB0
 #define LCD_RS PB1
@@ -38,17 +38,18 @@
 
 #define LCD_ENABLE_DELAY() _delay_us(LCD_DELAY_ENABLE_PULSE)
 
-#define LCD_ENABLE_SET()    LCD_INSTRUCTION_PORT |= _BV(LCD_EN)
-#define LCD_ENABLE_CLEAR()  LCD_INSTRUCTION_PORT &= ~_BV(LCD_EN)
-#define LCD_RS_SET()    LCD_INSTRUCTION_PORT |= _BV(LCD_RS)
-#define LCD_RS_CLEAR()  LCD_INSTRUCTION_PORT &= ~_BV(LCD_RS)
-#define LCD_RW_SET()    LCD_INSTRUCTION_PORT |= _BV(LCD_RW)
-#define LCD_RW_CLEAR()  LCD_INSTRUCTION_PORT &= ~_BV(LCD_RW)
+#define LCD_ENABLE_SET()   LCD_INSTRUCTION_PORT |= _BV(LCD_EN)
+#define LCD_ENABLE_CLEAR() LCD_INSTRUCTION_PORT &= ~_BV(LCD_EN)
+#define LCD_RS_SET()       LCD_INSTRUCTION_PORT |= _BV(LCD_RS)
+#define LCD_RS_CLEAR()     LCD_INSTRUCTION_PORT &= ~_BV(LCD_RS)
+#define LCD_RW_SET()       LCD_INSTRUCTION_PORT |= _BV(LCD_RW)
+#define LCD_RW_CLEAR()     LCD_INSTRUCTION_PORT &= ~_BV(LCD_RW)
 
-#define LCD_SEND_INSTRUCTION() {  \
-  LCD_INSTRUCTION_PORT = 0;       \
-  LCD_enablePulse();              \
-}
+#define LCD_SEND_INSTRUCTION() \
+  {                            \
+    LCD_INSTRUCTION_PORT = 0;  \
+    LCD_enablePulse();         \
+  }
 
 void LCD_init(void);
 void LCD_clear(void);
@@ -56,6 +57,5 @@ void LCD_function_set(void);
 void LCD_display_control(void);
 void LCD_entry_mode(void);
 void LCD_putc(char c);
-
 
 #endif
