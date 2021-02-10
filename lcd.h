@@ -18,6 +18,14 @@
 #define LCD_RS PB1
 #define LCD_EN PB2
 
+// command macros       // lcd_command()
+#define LCD_CLEAR      _BV(LCD_CLEARDISPLAY)
+#define LCD_CURSOR_OFF _BV(LCD_ON) | _BV(LCD_ON_DISPLAY)
+#define LCD_CURSOR     LCD_CURSOR_OFF | _BV(LCD_ON_CURSOR)
+#define LCD_BLINK      LCD_CURSOR_OFF | _BV(LCD_ON_BLINK)
+#define LCD_CURBLINK   LCD_CURSOR | _BV(LCD_ON_BLINK)
+
+// bit position macros  // lcd_write()
 #define LCD_CLEARDISPLAY    0
 #define LCD_RETURNHOME      1
 #define LCD_ENTRY           2
@@ -59,6 +67,7 @@
   }
 
 void LCD_init(void);
+void LCD_command(uint8_t command);
 void LCD_clear(void);
 void LCD_function_set(void);
 void LCD_display_control(void);
