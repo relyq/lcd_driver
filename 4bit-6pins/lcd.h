@@ -69,10 +69,6 @@
 void LCD_init(void);
 void LCD_command(uint8_t command);
 void LCD_clear(void);
-void LCD_function_set(void);
-void LCD_display_control(void);
-void LCD_entry_mode(void);
-void LCD_cursor_set(uint8_t cursor, uint8_t blink);
 void LCD_cursor(uint8_t y, uint8_t x);
 void LCD_putc(char c);
 void LCD_puts(const char* str);

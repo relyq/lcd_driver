@@ -9,7 +9,7 @@ int main(void) {
 
   LCD_init();
   LCD_puts("sogui<3");
-  LCD_command(LCD_CURSOR_OFF);
+  LCD_command(LCD_CURSOR);
 
   while (1) {
     sleep_mode();

@@ -61,6 +61,19 @@ void LCD_data(uint8_t byte) {
   LCD_waitbusy();
 }
 
+void LCD_function_set(void) {
+  LCD_command((_BV(LCD_FUNCTION)) | (_BV(LCD_FUNCTION_8BIT)) |
+              (_BV(LCD_FUNCTION_2LINES)));  // 8-bit; 2-line; 5x8 font
+}
+
+void LCD_display_control(void) {
+  LCD_command(LCD_CURSOR_OFF);  // display on; static cursor
+}
+
+void LCD_entry_mode(void) {
+  LCD_command((_BV(LCD_ENTRY)) | (_BV(LCD_ENTRY_INC)));
+}
+
 // public interface functions
 
 void LCD_command(uint8_t command) {
@@ -70,23 +83,10 @@ void LCD_command(uint8_t command) {
 
 void LCD_clear(void) { LCD_command(LCD_CLEAR); }
 
-void LCD_function_set(void) {
-  LCD_command((_BV(LCD_FUNCTION)) | (_BV(LCD_FUNCTION_8BIT)) |
-              (_BV(LCD_FUNCTION_2LINES)));  // 8-bit; 2-line; 5x8 font
-}
-
-void LCD_display_control(void) {
-  LCD_command(LCD_CURSOR);  // display on; static cursor
-}
-
-void LCD_entry_mode(void) {
-  LCD_command((_BV(LCD_ENTRY)) | (_BV(LCD_ENTRY_INC)));
-}
-
 void LCD_init(void) {
-  DDRB = (_BV(LCD_RW)) | (_BV(LCD_RS)) |
-         (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
-  _delay_ms(10);         // wait for display internal initialization to end
+  LCD_INSTRUCTION_DDR = (_BV(LCD_RW)) | (_BV(LCD_RS)) |
+                        (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
+  _delay_ms(10);  // wait for display internal initialization to end
   LCD_clear();
   LCD_function_set();
   LCD_display_control();
