@@ -62,8 +62,6 @@ void LCD_clear(void) {
 }
 
 void LCD_init(void) {
-  //  LCD_INSTRUCTION_DDR =
-  //     (_BV(LCD_RS)) | (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
   LCD_RS_DDR |= _BV(LCD_RS);
   LCD_EN_DDR |= _BV(LCD_EN);
   _delay_ms(40);  // wait for display internal initialization to end

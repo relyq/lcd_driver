@@ -75,7 +75,7 @@ void LCD_data(uint8_t byte) {
 }
 
 void LCD_function_set(void) {
-  LCD_command((_BV(LCD_FUNCTION)) | (_BV(LCD_FUNCTION_8BIT)) |
+  LCD_command((_BV(LCD_FUNCTION)) |
               (_BV(LCD_FUNCTION_2LINES)));  // 8-bit; 2-line; 5x8 font
 }
 
@@ -97,8 +97,9 @@ void LCD_command(uint8_t command) {
 void LCD_clear(void) { LCD_command(LCD_CLEAR); }
 
 void LCD_init(void) {
-  LCD_INSTRUCTION_DDR = (_BV(LCD_RW)) | (_BV(LCD_RS)) |
-                        (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
+  LCD_RS_DDR |= _BV(LCD_RS);
+  LCD_EN_DDR |= _BV(LCD_EN);
+  LCD_RW_DDR |= _BV(LCD_RW);
   _delay_ms(40);  // wait for display internal initialization to end
   LCD_function_set();
   LCD_display_control();
