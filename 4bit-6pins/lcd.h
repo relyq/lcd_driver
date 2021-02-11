@@ -14,6 +14,7 @@
 #define LCD_INSTRUCTION_DDR  DDRB
 #define LCD_DATA_PIN         PIND
 
+#define LCD_RW PB0
 #define LCD_RS PB1
 #define LCD_EN PB2
 
@@ -49,8 +50,6 @@
 // all timings are in uS
 #define LCD_DELAY_ENABLE_PULSE 1
 #define LCD_DELAY_BUSYFLAG     4
-#define LCD_DELAY_CLEAR        1600
-#define LCD_DELAY_HOME         1600
 
 #define LCD_ENABLE_DELAY() _delay_us(LCD_DELAY_ENABLE_PULSE)
 
@@ -58,6 +57,8 @@
 #define LCD_ENABLE_CLEAR() LCD_INSTRUCTION_PORT &= ~_BV(LCD_EN)
 #define LCD_RS_SET()       LCD_INSTRUCTION_PORT |= _BV(LCD_RS)
 #define LCD_RS_CLEAR()     LCD_INSTRUCTION_PORT &= ~_BV(LCD_RS)
+#define LCD_RW_SET()       LCD_INSTRUCTION_PORT |= _BV(LCD_RW)
+#define LCD_RW_CLEAR()     LCD_INSTRUCTION_PORT &= ~_BV(LCD_RW)
 
 #define LCD_SEND_INSTRUCTION() \
   {                            \

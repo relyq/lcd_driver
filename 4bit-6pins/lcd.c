@@ -11,11 +11,49 @@ static void LCD_enablePulse(void) {
   LCD_ENABLE_CLEAR();
 }
 
+static uint8_t LCD_read(uint8_t reg) {
+  uint8_t data = 0;
+
+  if (reg)
+    LCD_RS_SET();
+  else
+    LCD_RS_CLEAR();
+  LCD_RW_SET();
+
+  LCD_DATA_DDR &= 0xf0;  // set data port to input
+
+  LCD_ENABLE_SET();
+  LCD_ENABLE_DELAY();
+  data = LCD_DATA_PIN << 4;
+  LCD_ENABLE_CLEAR();
+
+  LCD_ENABLE_SET();
+  LCD_ENABLE_DELAY();
+  data |= LCD_DATA_PIN & 0x0f;
+  LCD_ENABLE_CLEAR();
+
+  return data;
+}
+
+static uint8_t LCD_waitbusy() {
+  register uint8_t byte = LCD_read(0);
+
+  while (byte & (1 << LCD_BUSYFLAG)) {
+    byte = LCD_read(0);
+  }
+
+  _delay_us(LCD_DELAY_BUSYFLAG);
+
+  return LCD_read(0);
+}
+
 static void LCD_write(uint8_t byte, uint8_t reg) {
   if (reg)
     LCD_RS_SET();
   else
     LCD_RS_CLEAR();
+
+  LCD_RW_CLEAR();
 
   uint8_t port_bits;
 
@@ -33,11 +71,11 @@ static void LCD_write(uint8_t byte, uint8_t reg) {
 
 void LCD_data(uint8_t byte) {
   LCD_write(byte, 1);
-  _delay_us(39);
+  LCD_waitbusy();
 }
 
 void LCD_function_set(void) {
-  LCD_command((_BV(LCD_FUNCTION)) |
+  LCD_command((_BV(LCD_FUNCTION)) | (_BV(LCD_FUNCTION_8BIT)) |
               (_BV(LCD_FUNCTION_2LINES)));  // 8-bit; 2-line; 5x8 font
 }
 
@@ -53,17 +91,14 @@ void LCD_entry_mode(void) {
 
 void LCD_command(uint8_t command) {
   LCD_write(command, 0);
-  _delay_us(37);  // min delay should be 37us
+  LCD_waitbusy();
 }
 
-void LCD_clear(void) {
-  LCD_command(LCD_CLEAR);
-  _delay_us(LCD_DELAY_CLEAR);
-}
+void LCD_clear(void) { LCD_command(LCD_CLEAR); }
 
 void LCD_init(void) {
-  LCD_INSTRUCTION_DDR =
-      (_BV(LCD_RS)) | (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
+  LCD_INSTRUCTION_DDR = (_BV(LCD_RW)) | (_BV(LCD_RS)) |
+                        (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
   _delay_ms(40);  // wait for display internal initialization to end
   LCD_function_set();
   LCD_display_control();
