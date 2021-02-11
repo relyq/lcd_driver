@@ -1,4 +1,4 @@
-#include "lcd.h"
+#include "lcd_4b7p.h"
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -35,7 +35,7 @@ static uint8_t LCD_read(uint8_t reg) {
   return data;
 }
 
-static uint8_t LCD_waitbusy() {
+static uint8_t LCD_waitbusy(void) {
   register uint8_t byte = LCD_read(0);
 
   while (byte & (1 << LCD_BUSYFLAG)) {

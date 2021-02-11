@@ -2,7 +2,7 @@
 #include <avr/sleep.h>
 #include <util/delay.h>
 
-#include "lcd.h"
+#include "lcd_4b7p.h"
 
 int main(void) {
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);

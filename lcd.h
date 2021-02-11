@@ -8,11 +8,46 @@
 
 #include <stdint.h>
 
-#define LCD_DATA_PORT        PORTD
-#define LCD_INSTRUCTION_PORT PORTB
-#define LCD_DATA_DDR         DDRD
-#define LCD_INSTRUCTION_DDR  DDRB
-#define LCD_DATA_PIN         PIND
+#define LCD_SAME_DATA_PORT    1  // if all data pins are on the same port
+#define LCD_ORDERED_DATA_PINS 1  // if data pins are D4-D7 = 0-3
+
+// if connecting data lines to the same port, use this
+#if LCD_SAME_DATA_PORT
+#define LCD_DATA_PORT PORTD
+#define LCD_DATA_DDR  DDRD
+#define LCD_DATA_PIN  PIND
+
+// if connecting data lines to different ports, use this
+#else
+#define LCD_DATA4_PORT PORTD
+#define LCD_DATA5_PORT PORTD
+#define LCD_DATA6_PORT PORTD
+#define LCD_DATA7_PORT PORTD
+
+#define LCD_DATA4_DDR DDRD
+#define LCD_DATA5_DDR DDRD
+#define LCD_DATA6_DDR DDRD
+#define LCD_DATA7_DDR DDRD
+
+#define LCD_DATA4_PIN PIND
+#define LCD_DATA5_PIN PIND
+#define LCD_DATA6_PIN PIND
+#define LCD_DATA7_PIN PIND
+#endif
+
+#if !LCD_ORDERED_DATA_PINS
+#define LCD_DATA4 PD0
+#define LCD_DATA5 PD1
+#define LCD_DATA6 PD2
+#define LCD_DATA7 PD3
+#endif
+
+// instruction lines
+#define LCD_RS_PORT PORTB
+#define LCD_EN_PORT PORTB
+
+#define LCD_RS_DDR DDRB
+#define LCD_EN_DDR DDRB
 
 #define LCD_RS PB1
 #define LCD_EN PB2
@@ -54,16 +89,10 @@
 
 #define LCD_ENABLE_DELAY() _delay_us(LCD_DELAY_ENABLE_PULSE)
 
-#define LCD_ENABLE_SET()   LCD_INSTRUCTION_PORT |= _BV(LCD_EN)
-#define LCD_ENABLE_CLEAR() LCD_INSTRUCTION_PORT &= ~_BV(LCD_EN)
-#define LCD_RS_SET()       LCD_INSTRUCTION_PORT |= _BV(LCD_RS)
-#define LCD_RS_CLEAR()     LCD_INSTRUCTION_PORT &= ~_BV(LCD_RS)
-
-#define LCD_SEND_INSTRUCTION() \
-  {                            \
-    LCD_INSTRUCTION_PORT = 0;  \
-    LCD_enablePulse();         \
-  }
+#define LCD_ENABLE_SET()   LCD_EN_PORT |= _BV(LCD_EN)
+#define LCD_ENABLE_CLEAR() LCD_EN_PORT &= ~_BV(LCD_EN)
+#define LCD_RS_SET()       LCD_RS_PORT |= _BV(LCD_RS)
+#define LCD_RS_CLEAR()     LCD_RS_PORT &= ~_BV(LCD_RS)
 
 void LCD_init(void);
 void LCD_command(uint8_t command);
