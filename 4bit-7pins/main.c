@@ -10,6 +10,8 @@ int main(void) {
   LCD_init();
   LCD_puts("sogui<3");
   LCD_command(LCD_CURSOR);
+  LCD_cursor(1, 0);
+  LCD_puts("holq");
 
   while (1) {
     sleep_mode();

@@ -20,11 +20,17 @@ static uint8_t LCD_read(uint8_t reg) {
     LCD_RS_CLEAR();
   LCD_RW_SET();
 
-  LCD_DATA_DDR = 0;  // set data port to input
+  LCD_DATA_DDR &= 0xf0;  // set data port to input
 
-  LCD_enablePulse();
+  LCD_ENABLE_SET();
+  LCD_ENABLE_DELAY();
+  data = LCD_DATA_PIN << 4;
+  LCD_ENABLE_CLEAR();
 
-  data = LCD_DATA_PIN;
+  LCD_ENABLE_SET();
+  LCD_ENABLE_DELAY();
+  data |= LCD_DATA_PIN & 0x0f;
+  LCD_ENABLE_CLEAR();
 
   return data;
 }
@@ -49,11 +55,18 @@ static void LCD_write(uint8_t byte, uint8_t reg) {
 
   LCD_RW_CLEAR();
 
-  LCD_DATA_DDR = 0xff;  // set data port to output
+  uint8_t port_bits;
 
-  LCD_DATA_PORT = byte;
+  LCD_DATA_DDR |= 0x0f;  // set data port to output
 
+  port_bits = LCD_DATA_PORT & 0xf0;
+  LCD_DATA_PORT = port_bits | ((byte >> 4) & 0x0f);
   LCD_enablePulse();
+
+  LCD_DATA_PORT = port_bits | (byte & 0x0f);
+  LCD_enablePulse();
+
+  LCD_DATA_PORT = port_bits | 0x0f;
 }
 
 void LCD_data(uint8_t byte) {
@@ -86,10 +99,10 @@ void LCD_clear(void) { LCD_command(LCD_CLEAR); }
 void LCD_init(void) {
   LCD_INSTRUCTION_DDR = (_BV(LCD_RW)) | (_BV(LCD_RS)) |
                         (_BV(LCD_EN));  // PB0 = RW, PB1 = RS, PB2 = EN
-  _delay_ms(10);  // wait for display internal initialization to end
-  LCD_clear();
+  _delay_ms(40);  // wait for display internal initialization to end
   LCD_function_set();
   LCD_display_control();
+  LCD_clear();
   LCD_entry_mode();
 }
 
