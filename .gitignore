@@ -1,6 +1,5 @@
 .*
 !.gitignore
-*.pdf
 *.elf
 *.lss
 *.map
